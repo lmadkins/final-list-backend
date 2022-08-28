@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { requireToken } = require('../middleware/auth');
 const User = require('../models/User');
-const List = require('../models/List');
+const Item = require('../models/Item');
 
 // All routes listed here start with '/lists'
 // as defined in app.js
@@ -23,7 +23,7 @@ router.get('/', requireToken async (req, res, next) => {
 
 // GET (index)
 // /lists/:type
-// Show all auser's lists matching a type (item or task)
+// Show all a user's lists matching a type (item or task)
 
 
 // GET (show)

@@ -29,7 +29,10 @@ const userController = require('./controllers/userController');
 app.use('/users', userController);
 
 const listController = require('./controllers/listController');
-app.use('/users', userController);
+app.use('/lists', userController);
+
+const itemController = require('./controllers/itemController');
+app.use('/lists/items', userController);
 
 // Require and use custom_errors.js in middleware folder
 // The catch all for handling errors
