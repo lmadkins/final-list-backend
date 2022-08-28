@@ -8,3 +8,31 @@
 //         required: true
 //       }
 //     }
+
+const mongoose = require('../db/connection');
+
+const ListSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true, 
+    },
+    details: {
+        type: String,
+        required: true, 
+    },
+    taskList: { 
+        type: Boolean, 
+        required: true,
+    }, 
+    itemList: { 
+        type: Boolean, 
+        required: true, 
+    }, 
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true, 
+    },
+    },
+    { timestamps: true }
+  );

@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const { createUserToken } = require('../middleware/auth')
 
+// All routes listed here start with '/users'
+// as defined in app.js
+
 // LOGIN
 // POST login 
 // /users/login

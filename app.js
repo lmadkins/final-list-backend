@@ -25,9 +25,11 @@ app.get('/', (req, res) => {
 
 // CONTROLLERS
 // Require the user resource routes and controllers
-const userController = require('./controllers/usersController');
+const userController = require('./controllers/userController');
 app.use('/users', userController);
 
+const listController = require('./controllers/listController');
+app.use('/users', userController);
 
 // Require and use custom_errors.js in middleware folder
 // The catch all for handling errors
