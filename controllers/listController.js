@@ -3,6 +3,7 @@ const router = express.Router();
 const { requireToken } = require('../middleware/auth');
 const User = require('../models/User');
 const Item = require('../models/Item');
+const List = require('../models/List');
 
 // All routes listed here start with '/lists'
 // as defined in app.js
@@ -26,7 +27,7 @@ router.get('/', requireToken,  async (req, res, next) => {
 // /lists/:type
 // Show all a user's lists matching a type (item or task)
 
-// returning null? 
+
 // 630ae5c1b5cdf6f6074d3e7e
 
 // GET (show)
@@ -53,8 +54,7 @@ router.get('/:id', (req, res, next) => {
 
 // 630adb49be010ae7a424a873
 // lma@g acct
-// HAVING ISSUES
-// getting ERROR >Cannot POST /lists/new
+
 // POST (create)
 // /lists/new
 // Create a new list
@@ -95,11 +95,11 @@ router.patch('/:id', requireToken, async(req, res, next) => {
 // Delete a list, then will redirect w/ GET to all lists- /lists
 router.delete('/:id', requireToken, (req, res, next) => {
     List.findByIdAndDelete(req.params.id)
-     .then(
+    .then(
         (list) => 
         res.status(204).json(list)) 
-     .catch(next)
-  });
+    .catch(next)
+});
 
 
 module.exports = router;

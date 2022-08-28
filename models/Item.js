@@ -4,7 +4,7 @@ const List = require('./List')
 const itemSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true, 
+        // required: true, 
         default: 'New Item'
     },
     list: {
@@ -25,7 +25,7 @@ const itemSchema = new mongoose.Schema({
     },
     completed: {
         type: Boolean,
-        required: true, 
+        // required: true, 
         default: false,
     },
     },

@@ -20,7 +20,7 @@ app.use(requestLogger);
 
 // Redirect any requests to the homepage
 app.get('/', (req, res) => {
-    res.redirect('/lists')
+    res.redirect('/')
 })
 
 // CONTROLLERS
@@ -29,10 +29,10 @@ const userController = require('./controllers/userController');
 app.use('/users', userController);
 
 const listController = require('./controllers/listController');
-app.use('/lists', userController);
+app.use('/lists', listController);
 
 const itemController = require('./controllers/itemController');
-app.use('/lists/items', userController);
+app.use('/lists/items', itemController);
 
 // Require and use custom_errors.js in middleware folder
 // The catch all for handling errors

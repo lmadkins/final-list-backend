@@ -14,14 +14,14 @@ const itemSchema = require('./Item');
 const taskSchema = require('./Task');
 const User = require('./User');
 
-const listSchema = new mongoose.Schema({
+const ListSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true, 
+        // required: true, 
     },
     details: {
         type: String,
-        required: true, 
+        // required: true, 
     },
     taskList: { 
         type: Boolean, 
@@ -42,8 +42,8 @@ const listSchema = new mongoose.Schema({
     tasks: [taskSchema],
     },
     { timestamps: true }
-  );
+);
 
-  module.exports = listSchema;
-//   const List  = mongoose.model('List', ListSchema);
-// module.exports = List;
+//   module.exports = listSchema;
+const List  = mongoose.model('List', ListSchema);
+module.exports = List;

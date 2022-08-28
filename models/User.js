@@ -1,5 +1,5 @@
 const mongoose = require('../db/connection');
-const listSchema = require('./List')
+const ListSchema = require('./List')
 
 const UserSchema = new mongoose.Schema(
     {
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        lists: [listSchema]
+        // lists: [listSchema]
       },
       {
 		timestamps: true,
