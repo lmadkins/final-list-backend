@@ -10,6 +10,8 @@
 //     }
 
 const mongoose = require('../db/connection');
+const itemSchema = require('./Item');
+const taskSchema = require('./Task');
 
 const ListSchema = new mongoose.Schema({
     name: {
@@ -41,5 +43,5 @@ const ListSchema = new mongoose.Schema({
     { timestamps: true }
   );
 
-  const List  = mongoose.model('List', listSchema);
+  const List  = mongoose.model('List', ListSchema);
 module.exports = List;

@@ -13,7 +13,7 @@ const List = require('../models/List');
 // /lists/items
 // Show all items of a list
 
-router.get('/:id', requireToken async (req, res, next) => {
+router.get('/:id', requireToken, async (req, res, next) => {
 
     try {
       // find the list first
@@ -29,8 +29,10 @@ router.get('/:id', requireToken async (req, res, next) => {
         // if you can't find it, send a 404
         res.sendStatus(404)
     }
-    } catch (next)
-})
+    } catch(err) {
+        next(err)
+    }
+});
 
 
 // GET (index)
@@ -50,8 +52,9 @@ router.get('/:id', requireToken, async(req, res, next) => {
         const item = await Item.findById(req.params.id)
         // .populate('timestamps')
         res.status(200).json(item)
-    } 
-    catch (next)
+    } catch(err) {
+        next(err)
+    }
 })
 
 
@@ -63,7 +66,9 @@ router.post('/', requireToken, async (req, res, next) => {
     try {
         const newItem = await Item.create(req.body)
         res.status(201).json(newItem)
-    } catch(next)
+    } catch(err) {
+        next(err)
+    }
 })
 
 
@@ -74,7 +79,7 @@ router.post('/', requireToken, async (req, res, next) => {
 router.patch('/:id', requireToken, async(req, res, next) => {
 
 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
-		.then((list) => res.status(200)json(list))
+		.then((list) => res.status(200).json(list))
 		.catch(next);
 });
 

@@ -1,7 +1,7 @@
 // BASIC CONFIG
 const express = require('express');
 const app = express();
-// const cors = require('cors');
+const cors = require('cors');
 app.set('port', process.env.PORT || 8000);
 
 
@@ -20,7 +20,7 @@ app.use(requestLogger);
 
 // Redirect any requests to the homepage
 app.get('/', (req, res) => {
-    res.redirect('/')
+    res.redirect('/lists')
 })
 
 // CONTROLLERS

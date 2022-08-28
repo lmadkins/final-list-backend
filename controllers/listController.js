@@ -11,14 +11,15 @@ const Item = require('../models/Item');
 // GET (index)
 // /lists
 // Show all of a user's lists
-router.get('/', requireToken async (req, res, next) => {
+router.get('/', requireToken,  async (req, res, next) => {
     try {
         const lists = await List.find({})
         // .populate('timestamps')
         res.status(200).json(lists)
+    } catch(err) {
+        next(err)
     }
-    catch(next)
-})
+});
 
 
 // GET (index)
@@ -34,9 +35,10 @@ router.get('/:id', requireToken, async(req, res, next) => {
         const list = await List.findById(req.params.id)
         // .populate('timestamps')
         res.status(200).json(list)
-    } 
-    catch (next)
-})
+    } catch(err) {
+        next(err)
+    }
+});
 
 
 // POST (create)
@@ -47,8 +49,10 @@ router.post('/', requireToken, async (req, res, next) => {
     try {
         const newList = await List.create(req.body)
         res.status(201).json(newList)
-    } catch(next)
-})
+    } catch(err) {
+        next(err)
+    }
+});
 
 
 // PATCH (update)
@@ -58,7 +62,7 @@ router.post('/', requireToken, async (req, res, next) => {
 router.patch('/:id', requireToken, async(req, res, next) => {
 
 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
-		.then((list) => res.status(200)json(list))
+		.then((list) => res.status(200).json(list))
 		.catch(next);
 });
 

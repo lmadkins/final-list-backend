@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const { createUserToken } = require('../middleware/auth')
+const { createUserToken, requireToken } = require('../middleware/auth')
 
 // All routes listed here start with '/users'
 // as defined in app.js
@@ -20,7 +20,8 @@ router.post('/login', async (req, res, next) => {
         // will be caught by our error handler or send back
         // a token that we'll in turn send to the client.
         .then((token) => res.json({ token }))
-        .catch(next);
+    } catch(err) {
+        next(err)
     }
 });
 
@@ -43,8 +44,10 @@ router.post('/signup', async (req, res, next) => {
             password 
     });
       return res.status(201).json(user);
-    } catch (next)
-  });
+    } catch(err) {
+        next(err)
+    }
+});
 /*** ALTERNATIVE ***/
 
 //Using promise chain
@@ -71,19 +74,30 @@ router.post('/signup', async (req, res, next) => {
 //       .catch(next);
 //   });
 
+router.get('/', async (req, res, next) => {
+    try {
+        const users = await User.find({})
+        res.json(users)
+    } catch(err) {
+        next(err)
+    }
+})
+
 // GET show a user's info 
 // /users/:id
-router.get(':id', requireToken, async (req, res, next) => {
+router.get('/:id', requireToken, async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
         res.json(user)
-    } catch(next)
-})
+    } catch(err) {
+        next(err)
+    }
+});
 
 // PATCH update a user's info 
 // /users/:id
 // then redirect to GET /users/:id
-router.put('/:id', requireToken, async (req, res, next) => {
+router.patch('/:id', requireToken, async (req, res, next) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true})
         if (updatedUser) {
@@ -91,8 +105,10 @@ router.put('/:id', requireToken, async (req, res, next) => {
         } else {
             res.sendStatus(404)
         }
-    } catch(next)
-})
+    } catch(err) {
+        next(err)
+    }
+});
 
 // DELETE a user
 // /users/:id
@@ -101,7 +117,9 @@ router.delete('/:id', requireToken, async (req, res, next) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id)
         res.json(deletedUser)
-    } catch(next)
-})
+    } catch(err) {
+        next(err)
+    }
+});
 
 module.exports = router;
