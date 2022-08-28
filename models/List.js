@@ -23,16 +23,23 @@ const ListSchema = new mongoose.Schema({
     taskList: { 
         type: Boolean, 
         required: true,
+        default: false,
     }, 
     itemList: { 
         type: Boolean, 
         required: true, 
+        default: true,
     }, 
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true, 
     },
+    items: [itemSchema],
+    tasks: [taskSchema],
     },
     { timestamps: true }
   );
+
+  const List  = mongoose.model('List', listSchema);
+module.exports = List;
