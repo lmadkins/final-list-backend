@@ -10,30 +10,20 @@ const Item = require('../models/Item');
 
 
 // GET (index)
-// /lists/items
+// /lists/items/listId/items
 // Show all items of a list
-
-router.get('/:listId', requireToken, async (req, res, next) => {
-
-    try {
-      // find the list first
-        const list = await List.findById(
-        req.params.id
-        )
-        if (list) {
-        // if task list is true or if item list is true
-        // respond with all of the items for that list
-        res.status(200).json(list.items)
-        //  or res.json(list.items)
-        } else {
-        // if you can't find it, send a 404
-        res.sendStatus(404)
-    }
-    } catch(err) {
-        next(err)
-    }
-});
-
+// (same as) GET show in ListController
+router.get('/:listId', requireToken,  (req, res, next) => {
+    List.findById(req.params.listId)
+    .populate('name')
+    .populate('details')
+    .populate('taskList')
+    .populate('itemList')
+    .populate('createdAt')
+    .select('items')
+    .then(items => res.json(items))
+    .catch(next)
+})
 
 // GET (index)
 // /lists/items/:priority
@@ -45,35 +35,46 @@ router.get('/:listId', requireToken, async (req, res, next) => {
 
 
 // GET (show)
-// /lists/items/:id
+// /lists/items/:listId/:id
 // Show a specific item
-router.get('/:listId/:id', requireToken, async(req, res, next) => {
-    try {
-        const item = await Item.findById(req.params.id)
-        // .populate('timestamps')
-        res.status(200).json(item)
-    } catch(err) {
-        next(err)
-    }
+router.get('/:listId/:id', requireToken, (req, res, next) => {
+    List.findById(req.params.id)
+        .then((list) => {
+            if (list) {
+                const foundItem = list.items.find(item => item._id.toString() === req.params.id)
+    
+            if (foundItem) {
+                res.json(foundItem)
+            } else {
+                res.sendStatus(404)
+            }
+            } else {
+              // if you can't find it, send a 404
+            res.sendStatus(404)
+            }
+        })
+        .catch(next)
 })
 
-
+// list id
+// 630b7883962b9510af2f6aba
 // POST (create)
-// /lists/items/new
+// /lists/items/:listId
 // Create a new item
 // (Then will redirect w/ GET to /lists/:id)
-router.post('/:listId', requireToken, async (req, res, next) => {
-    try {
-        const newItem = await Item.create(req.body)
-        res.status(201).json(newItem)
-    } catch(err) {
-        next(err)
-    }
+router.post('/:listId', requireToken,  (req, res, next) => {
+    const list = List.findById(req.params.listId)
+    .then(list => {
+        list.items.push(req.body)
+        list.save()
+        res.json(list.items)
+    })
+    .catch(next)
+    console.log('Item created')
 })
 
-
 // PATCH (update)
-// /lists/items/:id
+// /lists/items/:listId/:id
 // Edit an item's info
 // (Then will redirect w/ GET to /lists/:id)
 router.patch('/:listId/:id', requireToken, async(req, res, next) => {
@@ -85,8 +86,8 @@ router.patch('/:listId/:id', requireToken, async(req, res, next) => {
 
 
 // DELETE (destroy)
-//  /lists/:id
-// Delete a list, then will redirect w/ GET to all lists- /lists
+//  /lists/:listId/:id
+// Delete an item, then will redirect w/ GET to all lists- /lists
 router.delete('/:listId/:id', requireToken, (req, res, next) => {
     List.findByIdAndDelete(req.params.id)
      .then(

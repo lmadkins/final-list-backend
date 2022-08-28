@@ -30,9 +30,7 @@ router.get('/', requireToken,  async (req, res, next) => {
 
 // 630ae5c1b5cdf6f6074d3e7e
 
-// GET (show)
-// /lists/:id
-// Show a specific list
+
 // router.get('/:id', requireToken, async(req, res, next) => {
 //     try {
 //         const list = await List.findById(req.params.id)
@@ -44,11 +42,15 @@ router.get('/', requireToken,  async (req, res, next) => {
 // });
 // HAVING ISSUES
 // getting null
-router.get('/:id', (req, res, next) => {
-	List.findById(req.params.id).populate('list')
-		.then((list) => res.json(list))
-		.catch(next);
-});
+
+// GET (show)
+// /:id
+// Show a specific list
+// router.get('items/:id', requireToken, (req, res, next) => {
+// 	List.findById(req.params.id).populate('name', 'description', 'timestamp')
+// 		.then((list) => res.json(list))
+// 		.catch(next);
+// });
 
 
 

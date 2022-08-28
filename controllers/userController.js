@@ -13,7 +13,7 @@ const { createUserToken, requireToken } = require('../middleware/auth')
 // then after this will go to /lists
 router.post('/login', async (req, res, next) => {
     try {
-       await User.findOne({ email: req.body.email })
+        await User.findOne({ email: req.body.email })
         // Pass the user and the request to createUserToken
         .then((user) => createUserToken(req, user))
         // createUserToken will either throw an error that
@@ -37,13 +37,13 @@ router.post('/signup', async (req, res, next) => {
     try {
       // store the results of any asynchronous calls in variables
       // and use the await keyword before them
-      const password = await bcrypt.hash(req.body.password, 10);
-      const user = await User.create({
+        const password = await bcrypt.hash(req.body.password, 10);
+        const user = await User.create({
             displayname: req.body.displayname,
             email: req.body.email, 
             password 
     });
-      return res.status(201).json(user);
+        return res.status(201).json(user);
     } catch(err) {
         next(err)
     }

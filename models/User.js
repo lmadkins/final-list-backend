@@ -5,10 +5,14 @@ const UserSchema = new mongoose.Schema(
     {
         displayname: {
             type: String,
+            // lowercase: true,
+           // (convert it to lowercase for storage/search consistency purposes)
         },
         email: {
           type: String,
           required: true,
+          lowercase: true,
+          // (convert it to lowercase for storage/search consistency purposes)
           // unique: true,
         },
         password: {
@@ -18,6 +22,7 @@ const UserSchema = new mongoose.Schema(
         // lists: [listSchema]
       },
       {
+    collection: 'users',
 		timestamps: true,
 		toJSON: {
 			virtuals: true,
