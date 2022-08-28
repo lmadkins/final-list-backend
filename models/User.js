@@ -1,6 +1,7 @@
 const mongoose = require('../db/connection');
+const listSchema = require('./List')
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
     {
         displayname: {
             type: String,
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        lists: [listSchema]
       },
       {
 		timestamps: true,
@@ -28,5 +30,5 @@ const userSchema = new mongoose.Schema(
 	}
 )
 
-const User  = mongoose.model('User', userSchema);
+const User  = mongoose.model('User', UserSchema);
 module.exports = User;

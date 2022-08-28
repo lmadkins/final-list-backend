@@ -26,33 +26,56 @@ router.get('/', requireToken,  async (req, res, next) => {
 // /lists/:type
 // Show all a user's lists matching a type (item or task)
 
+// returning null? 
+// 630ae5c1b5cdf6f6074d3e7e
 
 // GET (show)
 // /lists/:id
 // Show a specific list
-router.get('/:id', requireToken, async(req, res, next) => {
-    try {
-        const list = await List.findById(req.params.id)
-        // .populate('timestamps')
-        res.status(200).json(list)
-    } catch(err) {
-        next(err)
-    }
+// router.get('/:id', requireToken, async(req, res, next) => {
+//     try {
+//         const list = await List.findById(req.params.id)
+//         // .populate('timestamps')
+//         res.status(200).json(list)
+//     } catch(err) {
+//         next(err)
+//     }
+// });
+// HAVING ISSUES
+// getting null
+router.get('/:id', (req, res, next) => {
+	List.findById(req.params.id).populate('list')
+		.then((list) => res.json(list))
+		.catch(next);
 });
 
 
+
+// 630adb49be010ae7a424a873
+// lma@g acct
+// HAVING ISSUES
+// getting ERROR >Cannot POST /lists/new
 // POST (create)
 // /lists/new
 // Create a new list
 // (Then will redirect w/ GET to /lists/:id)
-router.post('/', requireToken, async (req, res, next) => {
-    try {
-        const newList = await List.create(req.body)
-        res.status(201).json(newList)
-    } catch(err) {
-        next(err)
-    }
+// router.post('/', async (req, res, next) => {
+//     try {
+//         const newList = await List.create(req.body)
+//         res.status(201).json(newList)
+//     } catch(err) {
+//         next(err)
+//     }
+// });
+router.post('/new', (req, res, next) => {
+	const listData = req.body;
+	List.create(listData)
+	// .populate('creator')
+
+		.then((list) => res.status(201).json(list))
+		.catch(next);
 });
+
 
 
 // PATCH (update)
