@@ -1,9 +1,10 @@
 const mongoose = require('../db/connection');
-const itemSchema = require('./Item');
-const taskSchema = require('./Task');
+const ItemSchema = require('./Item');
+const TaskSchema = require('./Task');
 const User = require('./User');
 
 const ListSchema = new mongoose.Schema({
+    id: Number,
     name: {
         type: String,
         // required: true, 
@@ -27,8 +28,8 @@ const ListSchema = new mongoose.Schema({
         ref: 'User',
         // required: true, 
     }, 
-    items: [itemSchema],
-    tasks: [taskSchema], 
+    items: [ItemSchema],
+    tasks: [TaskSchema], 
         // collection: 'lists',
     },
     {

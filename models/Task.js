@@ -1,7 +1,8 @@
 const mongoose = require('../db/connection');
 const List = require('./List')
 
-const taskSchema = new mongoose.Schema({
+const TaskSchema = new mongoose.Schema({
+    id: Number,
     name: {
         type: String,
         required: true, 
@@ -25,10 +26,14 @@ const taskSchema = new mongoose.Schema({
         required: true, 
         default: false,
     },
+    // creator: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    // },
     },
     { timestamps: true }
 );
 
-module.exports = taskSchema;
+module.exports = TaskSchema;
 
 

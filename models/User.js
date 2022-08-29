@@ -1,8 +1,10 @@
 const mongoose = require('../db/connection');
 const ListSchema = require('./List')
+const ItemSchema = require('./Item')
 
 const UserSchema = new mongoose.Schema(
     {
+        id: Number,
         displayname: {
             type: String,
             // lowercase: true,
@@ -19,10 +21,11 @@ const UserSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        lists: [listSchema]
+        // lists: [ListSchema],
+        // items:[ItemSchema]
       },
       {
-    collection: 'users',
+    // collection: 'users',
 		timestamps: true,
 		toJSON: {
 			virtuals: true,

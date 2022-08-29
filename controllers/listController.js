@@ -10,7 +10,7 @@ const List = require('../models/List');
 
 
 // GET (index)
-// /lists
+// /lists/all
 // Show all of a user's lists
 router.get('/all',  async (req, res, next) => {
     try {
@@ -44,7 +44,8 @@ router.get('/all',  async (req, res, next) => {
 // getting null
 
 // GET (show)
-// /:id
+// /lists/items/:id
+// :id = list id
 // Show a specific list
 router.get('items/:id', requireToken, (req, res, next) => {
 	List.findById(req.params.id).populate('name', 'description', 'timestamp')
@@ -57,9 +58,7 @@ router.get('items/:id', requireToken, (req, res, next) => {
 // 630adb49be010ae7a424a873
 // lma@g acct
 
-// POST (create)
-// /lists/new
-// Create a new list
+
 // (Then will redirect w/ GET to /lists/:id)
 // router.post('/', async (req, res, next) => {
 //     try {
@@ -69,6 +68,10 @@ router.get('items/:id', requireToken, (req, res, next) => {
 //         next(err)
 //     }
 // });
+
+// POST (create)
+// /lists/new
+// Create a new list
 router.post('/new', (req, res, next) => {
 	const listData = req.body;
 	List.create(listData)

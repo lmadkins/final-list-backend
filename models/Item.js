@@ -2,7 +2,8 @@ const mongoose = require('../db/connection');
 const List = require('./List')
 const User = require('./User')
 
-const itemSchema = new mongoose.Schema({
+const ItemSchema = new mongoose.Schema({
+    id: Number,
     name: {
         type: String,
         required: [true, 'What\'s the item name?'],
@@ -21,13 +22,13 @@ const itemSchema = new mongoose.Schema({
         maxLength: 50,
         // required: true, 
     },
-    store: {
-        type: String,
-        minLength: [1, 'Can you expand on that?'],
-        maxLength: 30,
-        lowercase: true,
-        // (convert it to lowercase for storage/search consistency purposes)
-    },
+    // store: {
+    //     type: String,
+    //     minLength: [1, 'Can you expand on that?'],
+    //     maxLength: 30,
+    //     lowercase: true,
+    //     // (convert it to lowercase for storage/search consistency purposes)
+    // },
     priority: {
         type: String,
         // enum: ['Low', 'Medium', 'High', 'Highest'],
@@ -57,4 +58,4 @@ const itemSchema = new mongoose.Schema({
         timestamps: true }
 );
 
-module.exports = itemSchema;
+module.exports = ItemSchema;
