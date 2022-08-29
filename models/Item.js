@@ -1,5 +1,6 @@
 const mongoose = require('../db/connection');
 const List = require('./List')
+const User = require('./User')
 
 const itemSchema = new mongoose.Schema({
     name: {
@@ -45,6 +46,10 @@ const itemSchema = new mongoose.Schema({
         // maxLength: 5,
         lowercase: true,
         // (convert it to lowercase for storage/search consistency purposes)
+    },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     },
     { 

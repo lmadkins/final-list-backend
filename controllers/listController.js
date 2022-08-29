@@ -12,7 +12,7 @@ const List = require('../models/List');
 // GET (index)
 // /lists
 // Show all of a user's lists
-router.get('/',  async (req, res, next) => {
+router.get('/all',  async (req, res, next) => {
     try {
         const lists = await List.find({})
         // .populate('timestamps')
@@ -46,11 +46,11 @@ router.get('/',  async (req, res, next) => {
 // GET (show)
 // /:id
 // Show a specific list
-// router.get('items/:id', requireToken, (req, res, next) => {
-// 	List.findById(req.params.id).populate('name', 'description', 'timestamp')
-// 		.then((list) => res.json(list))
-// 		.catch(next);
-// });
+router.get('items/:id', requireToken, (req, res, next) => {
+	List.findById(req.params.id).populate('name', 'description', 'timestamp')
+		.then((list) => res.json(list))
+		.catch(next);
+});
 
 
 
