@@ -10,7 +10,7 @@ const Item = require('../models/Item');
 
 
 // GET (index)
-// /lists/items/listId/items
+// /lists/items/listId/
 // Show all items of a list
 // (same as) GET show in ListController
 router.get('/:listId', requireToken,  (req, res, next) => {

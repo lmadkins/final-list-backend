@@ -12,7 +12,7 @@ const List = require('../models/List');
 // GET (index)
 // /lists
 // Show all of a user's lists
-router.get('/', requireToken,  async (req, res, next) => {
+router.get('/',  async (req, res, next) => {
     try {
         const lists = await List.find({})
         // .populate('timestamps')

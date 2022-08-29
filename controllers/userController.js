@@ -11,20 +11,60 @@ const { createUserToken, requireToken } = require('../middleware/auth')
 // POST login 
 // /users/login
 // then after this will go to /lists
-router.post('/login', async (req, res, next) => {
-    try {
-        await User.findOne({ email: req.body.email })
-        // Pass the user and the request to createUserToken
-        .then((user) => createUserToken(req, user))
-        // createUserToken will either throw an error that
-        // will be caught by our error handler or send back
-        // a token that we'll in turn send to the client.
-        .then((token) => res.json({ token }))
-    } catch(err) {
-        next(err)
-    }
-});
+// router.post('/login', async (req, res, next) => {
+//     try {
+//         await User.findOne({ email: req.body.email })
+//         // Pass the user and the request to createUserToken
+//         .then((user) => createUserToken(req, user))
+//         // createUserToken will either throw an error that
+//         // will be caught by our error handler or send back
+//         // a token that we'll in turn send to the client.
+//         .then((token) => res.json({ token }))
+//     } catch(err) {
+//         next(err)
+//     }
+// });
 
+// router.post('/login', async (req, res, next)=>{
+//     // grabs the id of the signed in user
+//     let id = ''
+//     await User.findOne({email: req.body.email})
+//     .then(user => {
+//         if (user) {
+//             id = user._id
+//         }
+//     })
+//     .catch(next)
+//     // generates token for the signed in user, and sends back response with token and id
+//     await User.findOne({email: req.body.email})
+//     .then((user)=> createUserToken(req, user))
+//     .then((token)=> res.json({token: token, id: id}))
+//     // .catch(next)
+// })
+// app.post('login',(req,res)=>{
+//     const {email, password} = req.body;
+//     User.findOne({email: email},(err, user)=>{
+//         if(user){
+//         if(password === user.password){
+//             res.send({message:"login sucess", user:user})
+//         }else{
+//             res.send({message:"wrong credentials"})
+//         }
+//         }else{
+//             res.send("not register")
+//         }
+//     })
+// });
+router.post('/signin', (req, res, next) => {
+	User.findOne({ email: req.body.email })
+		// Pass the user and the request to createUserToken
+		.then((user) => createUserToken(req, user))
+		// createUserToken will either throw an error that
+		// will be caught by our error handler or send back
+		// a token that we'll in turn send to the client.
+		.then((token) => res.json({ token }))
+		.catch(next);
+});
 
 // SIGN UP
 // POST create a new user 
@@ -32,22 +72,42 @@ router.post('/login', async (req, res, next) => {
 // then redirect to /lists
 // Using async/await
 // Add the async keyword
-router.post('/signup', async (req, res, next) => {
-    // wrap it in a try/catch to handle errors
-    try {
-      // store the results of any asynchronous calls in variables
-      // and use the await keyword before them
-        const password = await bcrypt.hash(req.body.password, 10);
-        const user = await User.create({
-            displayname: req.body.displayname,
-            email: req.body.email, 
-            password 
-    });
-        return res.status(201).json(user);
-    } catch(err) {
-        next(err)
-    }
-});
+// router.post('/signup', async (req, res, next) => {
+//     // wrap it in a try/catch to handle errors
+//     try {
+//       // store the results of any asynchronous calls in variables
+//       // and use the await keyword before them
+//         const password = await bcrypt.hash(req.body.password, 10);
+//         const user = await User.create({
+//             displayname: req.body.displayname,
+//             email: req.body.email, 
+//             password 
+//     });
+//         return res.status(201).json(user);
+//     } catch(err) {
+//         next(err)
+//     }
+// });
+router.post('/signup',(req,res)=>{
+    console.log(req.body) 
+    const {displayname,email,password} =req.body;
+    User.findOne({email:email},(err,user)=>{
+        if(user){
+            res.send({message:"user already exist"})
+        }else {
+            const user = new User({displayname,email,password})
+            user.save(err=>{
+                if(err){
+                    res.send(err)
+                }else{
+                    res.send({message:"sucessful"})
+                }
+            })
+        }
+    })
+
+
+}) 
 /*** ALTERNATIVE ***/
 
 //Using promise chain
