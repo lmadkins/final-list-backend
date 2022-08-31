@@ -22,13 +22,13 @@ const ItemSchema = new mongoose.Schema({
         maxLength: 50,
         // required: true, 
     },
-    // store: {
-    //     type: String,
-    //     minLength: [1, 'Can you expand on that?'],
-    //     maxLength: 30,
-    //     lowercase: true,
-    //     // (convert it to lowercase for storage/search consistency purposes)
-    // },
+    where: {
+        type: String,
+        minLength: [1, 'Can you expand on that?'],
+        maxLength: 30,
+        lowercase: true,
+        // (convert it to lowercase for storage/search consistency purposes)
+    },
     priority: {
         type: String,
         // enum: ['Low', 'Medium', 'High', 'Highest'],
@@ -53,9 +53,7 @@ const ItemSchema = new mongoose.Schema({
         ref: 'User',
     },
     },
-    { 
-        // collection: 'items',
-        timestamps: true }
+    { timestamps: true, }
 );
 
 module.exports = ItemSchema;

@@ -12,7 +12,7 @@ const List = require('../models/List');
 // GET (index)
 // /lists/all
 // Show all of a user's lists
-router.get('/all',  async (req, res, next) => {
+router.get('/',  async (req, res, next) => {
     try {
         const lists = await List.find({})
         // .populate('timestamps')
@@ -22,52 +22,20 @@ router.get('/all',  async (req, res, next) => {
     }
 });
 
-
-// GET (index)
-// /lists/:type
-// Show all a user's lists matching a type (item or task)
-
-
 // 630ae5c1b5cdf6f6074d3e7e
-
-
-// router.get('/:id', requireToken, async(req, res, next) => {
-//     try {
-//         const list = await List.findById(req.params.id)
-//         // .populate('timestamps')
-//         res.status(200).json(list)
-//     } catch(err) {
-//         next(err)
-//     }
-// });
-// HAVING ISSUES
-// getting null
 
 // GET (show)
 // /lists/items/:id
-// :id = list id
+// (:id = list id)
 // Show a specific list
-router.get('items/:id', requireToken, (req, res, next) => {
-	List.findById(req.params.id).populate('name', 'description', 'timestamp')
-		.then((list) => res.json(list))
-		.catch(next);
-});
 
-
-
-// 630adb49be010ae7a424a873
-// lma@g acct
-
-
-// (Then will redirect w/ GET to /lists/:id)
-// router.post('/', async (req, res, next) => {
-//     try {
-//         const newList = await List.create(req.body)
-//         res.status(201).json(newList)
-//     } catch(err) {
-//         next(err)
-//     }
+// router.get('items/:id', requireToken, (req, res, next) => {
+// router.get('items/:id',(req, res, next) => {
+// 	List.findById(req.params.listId).populate('name', 'description', 'timestamp')
+// 		.then((list) => res.json(list))
+// 		.catch(next);
 // });
+
 
 // POST (create)
 // /lists/new
@@ -86,8 +54,8 @@ router.post('/new', (req, res, next) => {
 // PATCH (update)
 // /lists/:id
 // Edit a list's info
-// (Then will redirect w/ GET to /lists/:id)
-router.patch('/:id', requireToken, async(req, res, next) => {
+// router.patch('/:id', requireToken, async(req, res, next) => {
+router.patch('/:id', async(req, res, next) => {
 
 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
 		.then((list) => res.status(200).json(list))
@@ -97,8 +65,9 @@ router.patch('/:id', requireToken, async(req, res, next) => {
 
 // DELETE (destroy)
 //  /lists/:id
-// Delete a list, then will redirect w/ GET to all lists- /lists
-router.delete('/:id', requireToken, (req, res, next) => {
+// Delete a list
+// router.delete('/:id', requireToken, (req, res, next) 
+router.delete('/:id', (req, res, next) => {
     List.findByIdAndDelete(req.params.id)
     .then(
         (list) => 

@@ -11,9 +11,9 @@ const Item = require('../models/Item');
 
 // GET (index)
 // /lists/items/listId/
-// Show all items of a list
-// (same as) GET show in ListController
-router.get('/:listId', requireToken,  (req, res, next) => {
+// Show all items of a list. Same as GET show in ListController
+// '/:listId', requireToken,  (req, res, next) => {
+router.get('/:listId', (req, res, next) => {
     List.findById(req.params.listId)
     .populate('name')
     .populate('details')
@@ -25,20 +25,13 @@ router.get('/:listId', requireToken,  (req, res, next) => {
     .catch(next)
 })
 
-// GET (index)
-// /lists/items/:priority
-// Show all a list's items/tasks matching a certain priority type
-
-// GET (index)
-// /lists/items/:timeestimate
-// Show all a list's tasks (only tasks, items dont have a time estimate) matching a certain time estimate
-
 
 // GET (show)
 // /lists/items/:listId/:id
 // Show a specific item
-router.get('/:listId/:id', requireToken, (req, res, next) => {
-    List.findById(req.params.id)
+// router.get('/:listId/:id', requireToken, (req, res, next) => {
+router.get('/:listId/:id',  (req, res, next) => {
+    List.findById(req.params.listId)
         .then((list) => {
             if (list) {
                 const foundItem = list.items.find(item => item._id.toString() === req.params.id)
@@ -61,8 +54,10 @@ router.get('/:listId/:id', requireToken, (req, res, next) => {
 // POST (create)
 // /lists/items/:listId
 // Create a new item
-// (Then will redirect w/ GET to /lists/:id)
-router.post('/:listId', requireToken,  (req, res, next) => {
+
+// router.post('/:listId', requireToken,  (req, res, next) => {
+
+router.post('/:listId',  (req, res, next) => {
     const list = List.findById(req.params.listId)
     .then(list => {
         list.items.push(req.body)
@@ -74,11 +69,11 @@ router.post('/:listId', requireToken,  (req, res, next) => {
 })
 
 // PATCH (update)
-// /lists/items/:listId/:id
+//  /lists/items/:listId/:id
 // Edit an item's info
-// (Then will redirect w/ GET to /lists/:id)
-router.patch('/:listId/:id', requireToken, async(req, res, next) => {
+// router.patch('/:listId/:id', requireToken, async(req, res, next) => {
 
+router.patch('/:listId/:id', async(req, res, next) => {
 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
 		.then((list) => res.status(200).json(list))
 		.catch(next);
@@ -86,14 +81,15 @@ router.patch('/:listId/:id', requireToken, async(req, res, next) => {
 
 
 // DELETE (destroy)
-//  /lists/:listId/:id
+//  /lists/items/:listId/:id
 // Delete an item, then will redirect w/ GET to all lists- /lists
-router.delete('/:listId/:id', requireToken, (req, res, next) => {
+// router.delete('/:listId/:id', requireToken, (req, res, next) => {
+    router.delete('/:listId/:id', (req, res, next) => {
     List.findByIdAndDelete(req.params.id)
-     .then(
+    .then(
         (list) => 
         res.status(204).json(list)) 
-     .catch(next)
+    .catch(next)
   });
 
 

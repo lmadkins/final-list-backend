@@ -7,11 +7,9 @@ const { createUserToken, requireToken } = require('../middleware/auth')
 // All routes listed here start with '/users'
 // as defined in app.js
 
-// LOGIN
-// POST login 
-// /users/login
-// then after this will go to /lists
-
+// SIGN IN 
+// POST 
+// /users/signin
 router.post('/signin', (req, res, next) => {
 	User.findOne({ email: req.body.email })
 		// Pass the user and the request to createUserToken
@@ -23,19 +21,22 @@ router.post('/signin', (req, res, next) => {
 		.catch(next);
 });
 
-router.post('/signup',(req,res)=>{
+// SIGNUP
+// POST 
+// /users/signup
+router.post('/signup', (req, res)=>{
     console.log(req.body) 
     const {displayname,email,password} =req.body;
     User.findOne({email:email},(err,user)=>{
         if(user){
-            res.send({message:"user already exist"})
+            res.send({message:"A user with that name alraedy exists. Have you forgotten your password?"})
         }else {
             const user = new User({displayname,email,password})
             user.save(err=>{
                 if(err){
                     res.send(err)
                 }else{
-                    res.send({message:"sucessful"})
+                    res.send({message:"Sucess@"})
                 }
             })
         }
@@ -44,6 +45,9 @@ router.post('/signup',(req,res)=>{
 
 }) 
 
+// GET (index)
+// show all users
+// /users
 router.get('/', async (req, res, next) => {
     try {
         const users = await User.find({})
@@ -53,7 +57,8 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-// GET show a user's info 
+// GET (show)
+// show a specific user
 // /users/:id
 router.get('/:id', requireToken, async (req, res, next) => {
     try {
@@ -64,9 +69,10 @@ router.get('/:id', requireToken, async (req, res, next) => {
     }
 });
 
-// PATCH update a user's info 
+// PATCH 
+// update a user's info 
 // /users/:id
-// then redirect to GET /users/:id
+
 router.patch('/:id', requireToken, async (req, res, next) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true})
@@ -82,7 +88,6 @@ router.patch('/:id', requireToken, async (req, res, next) => {
 
 // DELETE a user
 // /users/:id
-// then redirect to home, logged out
 router.delete('/:id', requireToken, async (req, res, next) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id)
