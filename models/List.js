@@ -1,45 +1,43 @@
-// add the parent document’s id to each of the child documents to create a one to many
-// After the description property in the schema, add an owner field. Set its type to a Mongoose object id, reference the User model, and make it required:
-// {
-//     ...
-//     owner: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'User',
-//         required: true
-//       }
-//     }
-
 const mongoose = require('../db/connection');
+const ItemSchema = require('./Item');
+const TaskSchema = require('./Task');
+const User = require('./User');
 
 const ListSchema = new mongoose.Schema({
+    id: Number,
     name: {
         type: String,
-        required: true, 
+        // required: true, 
     },
     details: {
         type: String,
-        required: true, 
+        // required: true, 
     },
     taskList: { 
         type: Boolean, 
-        required: true,
+        // required: true,
         default: false,
     }, 
     itemList: { 
         type: Boolean, 
-        required: true, 
+        // required: true, 
         default: true,
     }, 
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true, 
+        // required: true, 
+    }, 
+    items: [ItemSchema],
+    tasks: [TaskSchema], 
+        // collection: 'lists',
     },
-    items: [itemSchema],
-    tasks: [taskSchema],
-    },
-    { timestamps: true }
-  );
+    {
+        timestamps: true, 
+    }
 
-  const List  = mongoose.model('List', listSchema);
+);
+
+//   module.exports = listSchema;
+const List  = mongoose.model('List', ListSchema);
 module.exports = List;

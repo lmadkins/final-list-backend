@@ -1,21 +1,31 @@
 const mongoose = require('../db/connection');
+const ListSchema = require('./List')
+const ItemSchema = require('./Item')
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
     {
+        id: Number,
         displayname: {
             type: String,
+            // lowercase: true,
+           // (convert it to lowercase for storage/search consistency purposes)
         },
         email: {
           type: String,
           required: true,
-          unique: true,
+          lowercase: true,
+          // (convert it to lowercase for storage/search consistency purposes)
+          // unique: true,
         },
         password: {
           type: String,
           required: true,
         },
+        // lists: [ListSchema],
+        // items:[ItemSchema]
       },
       {
+    // collection: 'users',
 		timestamps: true,
 		toJSON: {
 			virtuals: true,
@@ -28,5 +38,5 @@ const userSchema = new mongoose.Schema(
 	}
 )
 
-const User  = mongoose.model('User', userSchema);
+const User  = mongoose.model('User', UserSchema);
 module.exports = User;

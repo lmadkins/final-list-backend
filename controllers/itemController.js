@@ -3,92 +3,102 @@ const router = express.Router();
 const { requireToken } = require('../middleware/auth');
 const User = require('../models/User');
 const List = require('../models/List');
-
+const Item = require('../models/Item');
 
 // All routes listed here start with '/lists/items'
 // as defined in app.js
 
 
 // GET (index)
-// /lists/items
-// Show all items of a list
-
-router.get('/:id', requireToken async (req, res, next) => {
-
-    try {
-      // find the list first
-        const list = await List.findById(
-        req.params.id
-        )
-        if (list) {
-        // if task list is true or if item list is true
-        // respond with all of the items for that list
-        res.status(200).json(list.items)
-        //  or res.json(list.items)
-        } else {
-        // if you can't find it, send a 404
-        res.sendStatus(404)
-    }
-    } catch (next)
+// /lists/items/:listId/
+// Show all items of a list. Same as GET show in ListController
+// '/:listId', requireToken,  (req, res, next) => {
+router.get('/:listId', (req, res, next) => {
+    List.findById(req.params.listId)
+    .populate('name')
+    .populate('details')
+    .populate('taskList')
+    .populate('itemList')
+    .populate('createdAt')
+    .select('items')
+    .then(items => res.json(items))
+    .catch(next)
 })
-
-
-// GET (index)
-// /lists/items/:priority
-// Show all a list's items/tasks matching a certain priority type
-
-// GET (index)
-// /lists/items/:timeestimate
-// Show all a list's tasks (only tasks, items dont have a time estimate) matching a certain time estimate
 
 
 // GET (show)
-// /lists/items/:id
+// /lists/items/:listId/:id
 // Show a specific item
-router.get('/:id', requireToken, async(req, res, next) => {
-    try {
-        const item = await Item.findById(req.params.id)
-        // .populate('timestamps')
-        res.status(200).json(item)
-    } 
-    catch (next)
+// router.get('/:listId/:id', requireToken, (req, res, next) => {
+router.get('/:listId/:id',  (req, res, next) => {
+    List.findById(req.params.listId)
+        .then((list) => {
+            if (list) {
+                const foundItem = list.items.find(item => item._id.toString() === req.params.id)
+    
+            if (foundItem) {
+                res.json(foundItem)
+            } else {
+                res.sendStatus(404)
+            }
+            } else {
+              // if you can't find it, send a 404
+            res.sendStatus(404)
+            }
+        })
+        .catch(next)
 })
 
-
+// list id
+// 630b7883962b9510af2f6aba
 // POST (create)
-// /lists/items/new
+// /lists/items/:listId
 // Create a new item
-// (Then will redirect w/ GET to /lists/:id)
-router.post('/', requireToken, async (req, res, next) => {
-    try {
-        const newItem = await Item.create(req.body)
-        res.status(201).json(newItem)
-    } catch(next)
-})
 
+// router.post('/:listId', requireToken,  (req, res, next) => {
+
+router.post('/:listId',  (req, res, next) => {
+    const list = List.findById(req.params.listId)
+    .then(list => {
+        list.items.push(req.body)
+        list.save()
+        res.json(list.items)
+    })
+    .catch(next)
+    console.log('Item created')
+})
 
 // PATCH (update)
-// /lists/items/:id
+//  /lists/items/:listId/:id
 // Edit an item's info
-// (Then will redirect w/ GET to /lists/:id)
-router.patch('/:id', requireToken, async(req, res, next) => {
+// router.patch('/:listId/:id', requireToken, async(req, res, next) => {
 
+router.patch('/:listId/:id', async(req, res, next) => {
 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
-		.then((list) => res.status(200)json(list))
+		.then((list) => res.status(200).json(list))
 		.catch(next);
 });
 
 
 // DELETE (destroy)
-//  /lists/:id
-// Delete a list, then will redirect w/ GET to all lists- /lists
-router.delete('/:id', requireToken, (req, res, next) => {
-    List.findByIdAndDelete(req.params.id)
-     .then(
-        (list) => 
-        res.status(204).json(list)) 
-     .catch(next)
+//  /lists/items/:id
+// Delete an item, then will redirect w/ GET to all lists- /lists
+// router.delete('/:id', requireToken, (req, res, next) => {
+router.delete('/:listId/:id', (req, res, next) => {
+    List.findById(req.params.listId)
+    .then((list) => {
+        if (list) {
+            list.items.id(req.params.id).remove();
+            list.save()
+            res.status(204).json(list)
+        } else {
+            // if you can't find it, send a 404
+            res.sendStatus(404)  
+        }
+    }) 
+    .catch(next)
   });
+
 
 
 module.exports = router;

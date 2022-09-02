@@ -1,7 +1,7 @@
 // BASIC CONFIG
 const express = require('express');
 const app = express();
-// const cors = require('cors');
+const cors = require('cors');
 app.set('port', process.env.PORT || 8000);
 
 
@@ -29,10 +29,10 @@ const userController = require('./controllers/userController');
 app.use('/users', userController);
 
 const listController = require('./controllers/listController');
-app.use('/lists', userController);
+app.use('/lists', listController);
 
 const itemController = require('./controllers/itemController');
-app.use('/lists/items', userController);
+app.use('/lists/items', itemController);
 
 // Require and use custom_errors.js in middleware folder
 // The catch all for handling errors
