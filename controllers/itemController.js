@@ -10,7 +10,7 @@ const Item = require('../models/Item');
 
 
 // GET (index)
-// /lists/items/listId/
+// /lists/items/:listId/
 // Show all items of a list. Same as GET show in ListController
 // '/:listId', requireToken,  (req, res, next) => {
 router.get('/:listId', (req, res, next) => {
@@ -81,16 +81,24 @@ router.patch('/:listId/:id', async(req, res, next) => {
 
 
 // DELETE (destroy)
-//  /lists/items/:listId/:id
+//  /lists/items/:id
 // Delete an item, then will redirect w/ GET to all lists- /lists
-// router.delete('/:listId/:id', requireToken, (req, res, next) => {
-    router.delete('/:listId/:id', (req, res, next) => {
-    List.findByIdAndDelete(req.params.id)
-    .then(
-        (list) => 
-        res.status(204).json(list)) 
+// router.delete('/:id', requireToken, (req, res, next) => {
+router.delete('/:listId/:id', (req, res, next) => {
+    List.findById(req.params.listId)
+    .then((list) => {
+        if (list) {
+            list.items.id(req.params.id).remove();
+            list.save()
+            res.status(204).json(list)
+        } else {
+            // if you can't find it, send a 404
+            res.sendStatus(404)  
+        }
+    }) 
     .catch(next)
   });
+
 
 
 module.exports = router;
