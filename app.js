@@ -2,8 +2,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-app.set('port', 8000);
-// app.set('port', process.env.PORT || 8000);
+app.set('port', process.env.PORT || 8000);
 
 // MIDDLEWARE
 // Parses key value pairs in request
