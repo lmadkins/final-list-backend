@@ -20,7 +20,7 @@ app.use(requestLogger);
 
 // Redirect any requests to the homepage
 app.get('/', (req, res) => {
-    res.redirect('/')
+    res.redirect('/lists')
 })
 
 // CONTROLLERS
