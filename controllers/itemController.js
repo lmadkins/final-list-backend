@@ -84,11 +84,11 @@ router.patch('/:listId/:id', async(req, res, next) => {
 //  /lists/items/:id
 // Delete an item, then will redirect w/ GET to all lists- /lists
 // router.delete('/:id', requireToken, (req, res, next) => {
-router.delete('/:listId/:id', (req, res, next) => {
+router.delete('/:listId/:itemId', (req, res, next) => {
     List.findById(req.params.listId)
     .then((list) => {
         if (list) {
-            list.items.id(req.params.id).remove();
+            list.items.id(req.params.itemId).remove();
             list.save()
             res.status(204).json(list)
         } else {

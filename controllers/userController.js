@@ -29,14 +29,15 @@ router.post('/signup', (req, res)=>{
     const {displayname,email,password} =req.body;
     User.findOne({email:email},(err,user)=>{
         if(user){
-            res.send({message:"A user with that name alraedy exists. Have you forgotten your password?"})
+            res.send({message:"A user with that name already exists. Have you forgotten your password?"})
         }else {
             const user = new User({displayname,email,password})
             user.save(err=>{
                 if(err){
                     res.send(err)
                 }else{
-                    res.send({message:"Sucess@"})
+                    res.json(user)
+                    res.send({message:"Sucess!"})
                 }
             })
         }
@@ -48,7 +49,7 @@ router.post('/signup', (req, res)=>{
 // GET (index)
 // show all users
 // /users
-router.get('/', async (req, res, next) => {
+router.get('/',  requireToken, async (req, res, next) => {
     try {
         const users = await User.find({})
         res.json(users)
@@ -60,13 +61,11 @@ router.get('/', async (req, res, next) => {
 // GET (show)
 // show a specific user
 // /users/:id
-router.get('/:id', requireToken, async (req, res, next) => {
-    try {
-        const user = await User.findById(req.params.id)
-        res.json(user)
-    } catch(err) {
-        next(err)
-    }
+router.get('/:id', requireToken,  (req, res, next) => {
+	// const id = req.params.id;
+	User.findById(req.params.id)
+		.then((user) => res.json(user))
+		.catch(next);
 });
 
 // PATCH 
