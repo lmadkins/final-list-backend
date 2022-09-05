@@ -10,41 +10,65 @@ const { createUserToken, requireToken } = require('../middleware/auth')
 // SIGN IN 
 // POST 
 // /users/signin
-router.post('/signin', (req, res, next) => {
-	User.findOne({ email: req.body.email })
-		// Pass the user and the request to createUserToken
-		.then((user) => createUserToken(req, user))
-		// createUserToken will either throw an error that
-		// will be caught by our error handler or send back
-		// a token that we'll in turn send to the client.
-		.then((token) => res.json({ token }))
-		.catch(next);
-});
+router.post('/signin', async (req, res, next) => {
+    try {
+        const user = await User.findOne({ email: req.body.email })
+        if (user) {
+            const token = createUserToken(req, user)
+            res.json({token})
+        }
+        else {
+            res.sendStatus(404)
+        }
+    } 
+    catch(err) {
+    next(err)
+ }
+})
+//  	await User.findOne({ email: req.body.email })
+// 		// Pass the user and the request to createUserToken
+// 		.then((user) => createUserToken(req, user))
+// 		// createUserToken will either throw an error that
+// 		// will be caught by our error handler or send back
+// 		// a token that we'll in turn send to the client.
+// 		.then((token) => res.json({ token }))
+// 		.catch(next);
+// });
 
 // SIGNUP
 // POST 
 // /users/signup
-router.post('/signup', (req, res)=>{
-    console.log(req.body) 
-    const {displayname,email,password} =req.body;
-    User.findOne({email:email},(err,user)=>{
-        if(user){
-            res.send({message:"A user with that name already exists. Have you forgotten your password?"})
-        }else {
-            const user = new User({displayname,email,password})
-            user.save(err=>{
-                if(err){
-                    res.send(err)
-                }else{
-                    res.json(user)
-                    res.send({message:"Sucess!"})
-                }
-            })
-        }
-    })
-
-
-}) 
+router.post('/signup'), (req, res, next) => {
+    bcrypt
+    .hash(req.body.password, 10)
+    .then(hash => ({
+        displayname: req.body.displayname,
+        email: req.body.email, 
+        password: hash,
+    }))
+    .then(user => User.create(user))
+    .then (user => res.status(201).json(user))
+    .catch(next)
+}
+// router.post('/signup', (req, res)=>{
+//     console.log(req.body) 
+//     const {displayname,email,password} =req.body;
+//     User.findOne({email:email},(err,user)=>{
+//         if(user){
+//             res.send({message:"A user with that name already exists. Have you forgotten your password?"})
+//         }else {
+//             const user = new User({displayname,email,password})
+//             user.save(err=>{
+//                 if(err){
+//                     res.send(err)
+//                 }else{
+//                     res.json(user)
+//                     res.send({message:"Sucess!"})
+//                 }
+//             })
+//         }
+//     })
+// }) 
 
 // GET (index)
 // show all users

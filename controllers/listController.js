@@ -15,12 +15,18 @@ const List = require('../models/List');
 router.get('/',  async (req, res, next) => {
     try {
         const lists = await List.find({})
-        // .populate('timestamps')
+        .populate('creator')
         res.status(200).json(lists)
     } catch(err) {
         next(err)
     }
 });
+
+
+// GET (index)
+// /lists/:type
+// Show all a user's lists matching a type (item or task)
+
 
 // 630ae5c1b5cdf6f6074d3e7e
 

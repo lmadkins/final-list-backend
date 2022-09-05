@@ -12,14 +12,14 @@ const UserSchema = new mongoose.Schema(
         },
         email: {
           type: String,
-          required: true,
+          // required: true,
           lowercase: true,
           // (convert it to lowercase for storage/search consistency purposes)
           // unique: true,
         },
         password: {
           type: String,
-          required: true,
+          // required: true,
         },
         // lists: [ListSchema],
         // items:[ItemSchema]
