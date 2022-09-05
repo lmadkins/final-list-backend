@@ -13,16 +13,34 @@ const Item = require('../models/Item');
 // /lists/items/:listId/
 // Show all items of a list. Same as GET show in ListController
 // '/:listId', requireToken,  (req, res, next) => {
-router.get('/:listId', (req, res, next) => {
-    List.findById(req.params.listId)
-    .populate('name')
-    .populate('details')
-    .populate('taskList')
-    .populate('itemList')
-    .populate('createdAt')
-    .select('items')
-    .then(items => res.json(items))
-    .catch(next)
+// router.get('/:listId', (req, res, next) => {
+//     List.findById(req.params.listId)
+//     .populate('name')
+//     .populate('details')
+//     .populate('taskList')
+//     .populate('itemList')
+//     .populate('createdAt')
+//     .select('items')
+//     .then(items => res.json(items))
+//     .catch(next)
+// })
+router.get('/:listId', async (req, res, next) => {
+    try {
+        const listItems = await List.findById(req.params.listId)
+        listItems ? res.status(200).json(listItems) : res.sendStatus(404)
+    }
+    catch(err) {
+        next(err)
+    }
+    // List.findById(req.params.listId)
+    // .populate('name')
+    // .populate('details')
+    // .populate('taskList')
+    // .populate('itemList')
+    // .populate('createdAt')
+    // .select('items')
+    // .then(items => res.json(items))
+    // .catch(next)
 })
 
 
@@ -65,14 +83,13 @@ router.post('/:listId',  (req, res, next) => {
         res.json(list.items)
     })
     .catch(next)
-    console.log('Item created')
 })
 
 // PATCH (update)
 //  /lists/items/:listId/:id
 // Edit an item's info
-// router.patch('/:listId/:id', requireToken, async(req, res, next) => {
 
+requireToken
 router.patch('/:listId/:id', async(req, res, next) => {
 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
 		.then((list) => res.status(200).json(list))

@@ -6,9 +6,9 @@ const ItemSchema = new mongoose.Schema({
     id: Number,
     name: {
         type: String,
-        required: true,
-        minLength: [1, 'Can you expand on that?'],
-        maxLength: 50,
+        // required: true,
+        // minLength: [1, 'Can you expand on that?'],
+        // maxLength: 50,
         default: 'New Item'
          // (convert it to lowercase for storage/search consistency purposes)
     },
@@ -18,24 +18,24 @@ const ItemSchema = new mongoose.Schema({
     },
     details: {
         type: String,
-        minLength: [1, 'Can you expand on that?'],
-        maxLength: 100,
+        // minLength: [1, 'Can you expand on that?'],
+        // maxLength: 100,
         // required: true, 
     },
     where: {
         type: String,
-        minLength: [1, 'Can you expand on that?'],
-        maxLength: 30,
+        // minLength: [1, 'Can you expand on that?'],
+        // maxLength: 30,
         lowercase: true,
         // (convert it to lowercase for storage/search consistency purposes)
     },
     priority: {
         type: String,
         // enum: ['Low', 'Medium', 'High', 'Highest'],
-        required: true,
+        // required: true,
         default: 'Low',
-        minLength: 3,
-        maxLength: 7,
+        // minLength: 3,
+        // maxLength: 7,
         lowercase: true,
         // (convert it to lowercase for storage/search consistency purposes)
     },
