@@ -89,14 +89,20 @@ router.post('/:listId',  (req, res, next) => {
 //  /lists/items/:listId/:id
 // Edit an item's info
 
-requireToken
-router.patch('/:listId/:id', async(req, res, next) => {
-	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
-		.then((list) => res.status(200).json(list))
-		.catch(next);
-});
-
-
+// requireToken
+// router.patch('/:listId/:id', async(req, res, next) => {
+// 	List.findByIdAndUpdate(req.params.id, req.body, { new: true })
+// 		.then((list) => res.status(200).json(list))
+// 		.catch(next);
+// });
+router.patch('/:listId/:id', (req, res, next) => {
+const id = req.params.id
+const itemData = req.body
+List.findOneAndUpdate({'items._id': id}, itemData, {new:true})
+// .populate()
+.then((list) => res.json(list))
+.catch(next); 
+})
 // DELETE (destroy)
 //  /lists/items/:id
 // Delete an item, then will redirect w/ GET to all lists- /lists
